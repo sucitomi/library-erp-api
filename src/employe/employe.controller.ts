@@ -1,8 +1,11 @@
+import * as bcrypt from 'bcrypt';
 import { Controller, Get, Post, Put, Delete, Param, Body, Req, Res } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiBadRequestResponse, ApiOkResponse } from '@nestjs/swagger';
 
 import { Employe } from '../entities/employe.entity';
 import { EmployeService } from '../employe/employe.service';
+
+const saltOrRounds = 10;
 
 @ApiTags('Employers')
 @Controller('api/v1/employees')
@@ -17,6 +20,10 @@ export class EmployeController {
   @ApiBadRequestResponse({ description: 'Bad Request' })
   async findAll(): Promise<Employe[]> {
   	let list = await this.employeService.findAll();
+
+    for(let l of list) {
+      delete l.password
+    }
 
   	return list;
   }
@@ -43,6 +50,10 @@ export class EmployeController {
   })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   async create(@Body() employe: Employe): Promise<Employe> {
+
+    const hash = await bcrypt.hash(employe.password, saltOrRounds);
+    employe.password = hash
+
     return this.employeService.create(employe);
   }
 
