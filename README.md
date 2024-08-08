@@ -2,7 +2,9 @@
 
 ## Description
 
-A simple Library ERP api.
+Library ERP api.
+Minimális REST API könyvek, kölcsönzők, dolgozók és kölcsönzések nyílvántartásához.
+Autentikáció basic JWT token-nel.
 
 ## Installation
 
